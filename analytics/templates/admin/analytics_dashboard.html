@@ -1,0 +1,187 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<div style="padding: 20px; max-width: 1200px; margin: 0 auto;">
+    <h1 style="margin-bottom: 30px;">Mahmood Pharmacy Analytics Dashboard</h1>
+    
+    <!-- Helper Mixin for Chart Container -->
+    <style>
+        .chart-container {
+            background: white;
+            padding: 25px;
+            margin-bottom: 30px; /* Space between rows */
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .btn-download {
+            background-color: #417690;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+        }
+        .btn-download:hover {
+            background-color: #2b5062;
+        }
+        canvas {
+            max-height: 500px; /* Limit height so it doesn't get too tall on big screens */
+        }
+    </style>
+
+    <!-- 1. Top Customers Bar Chart -->
+    <div class="chart-container">
+        <div class="chart-header">
+            <h3>Top 10 Customers</h3>
+            <button class="btn-download" onclick="downloadChart('topCustomersChart', 'top_customers.png')">Download PNG</button>
+        </div>
+        <canvas id="topCustomersChart"></canvas>
+    </div>
+
+    <!-- 2. Monthly Sales Line Chart -->
+    <div class="chart-container">
+        <div class="chart-header">
+            <h3>Monthly Sales Trend</h3>
+            <button class="btn-download" onclick="downloadChart('salesTrendChart', 'sales_trend.png')">Download PNG</button>
+        </div>
+        <canvas id="salesTrendChart"></canvas>
+    </div>
+
+    <!-- 3. Product Sales Bar Chart -->
+    <div class="chart-container">
+        <div class="chart-header">
+            <h3>Top Selling Products</h3>
+            <button class="btn-download" onclick="downloadChart('topProductsChart', 'top_products.png')">Download PNG</button>
+        </div>
+        <canvas id="topProductsChart"></canvas>
+    </div>
+
+    <!-- 4. Order Status Pie Chart -->
+    <div class="chart-container">
+        <div class="chart-header">
+            <h3>Orders by Status</h3>
+            <button class="btn-download" onclick="downloadChart('orderStatusChart', 'order_status.png')">Download PNG</button>
+        </div>
+        <div style="height: 500px; display: flex; justify-content: center;">
+             <canvas id="orderStatusChart"></canvas>
+        </div>
+    </div>
+
+    <!-- 5. Orders per Branch Bar Chart -->
+    <div class="chart-container">
+        <div class="chart-header">
+            <h3>Orders per Branch</h3>
+            <button class="btn-download" onclick="downloadChart('branchSalesChart', 'branch_sales.png')">Download PNG</button>
+        </div>
+        <canvas id="branchSalesChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Data from Django Context
+    const customerData = {{ top_customers|safe }};
+    const salesData = {{ monthly_sales|safe }};
+    const productData = {{ top_products|safe }};
+    const statusData = {{ order_status|safe }};
+
+    // Generic Download Function
+    function downloadChart(canvasId, fileName) {
+        const canvas = document.getElementById(canvasId);
+        // Create a dummy link to trigger download
+        const link = document.createElement('a');
+        link.download = fileName;
+        link.href = canvas.toDataURL('image/png', 1.0);
+        link.click();
+    }
+
+    // 1. Top Customers Chart
+    new Chart(document.getElementById('topCustomersChart'), {
+        type: 'bar',
+        data: {
+            labels: customerData.map(d => d.email),
+            datasets: [{
+                label: 'Total Spent (Rs)',
+                data: customerData.map(d => d.total_spent),
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    // 2. Sales Trend Chart
+    new Chart(document.getElementById('salesTrendChart'), {
+        type: 'line',
+        data: {
+            labels: salesData.map(d => d.period),
+            datasets: [{
+                label: 'Total Sales (Rs)',
+                data: salesData.map(d => d.total),
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    // 3. Top Products Chart
+    new Chart(document.getElementById('topProductsChart'), {
+        type: 'bar',
+        data: {
+            labels: productData.map(d => d.name),
+            datasets: [{
+                label: 'Units Sold',
+                data: productData.map(d => d.count),
+                backgroundColor: 'rgba(255, 159, 64, 0.6)',
+                borderColor: 'rgba(255, 159, 64, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false } 
+    });
+
+    // 4. Order Status Chart
+    new Chart(document.getElementById('orderStatusChart'), {
+        type: 'pie',
+        data: {
+            labels: statusData.map(d => d.status),
+            datasets: [{
+                data: statusData.map(d => d.count),
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    // 5. Branch Sales Chart
+    const branchData = {{ branch_sales|safe }};
+    new Chart(document.getElementById('branchSalesChart'), {
+        type: 'bar',
+        data: {
+            labels: branchData.map(d => d.branch__name),
+            datasets: [{
+                label: 'Orders',
+                data: branchData.map(d => d.count),
+                backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+</script>
+{% endblock %}

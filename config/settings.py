@@ -44,6 +44,12 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'users',
+    'products',
+    'orders',
+    'prescriptions',
+    'branches',
+    'analytics',
+    'marketing',
 ]
 
 MIDDLEWARE = [
@@ -166,6 +172,8 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
 
+OTP_EXPIRATION_MINUTES = 10
+
 # CORS
 CORS_ALLOW_ALL_ORIGINS = True # For dev only, change in prod
 
@@ -201,9 +209,9 @@ JAZZMIN_SETTINGS = {
 
     # Links to put along the top menu
     "topmenu_links": [
-
         # Url that opens in current window, use empty _blank for in current window
         {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Dashboard", "url": "admin-charts", "permissions": ["auth.view_user"], "icon": "fas fa-chart-line"},
         {"name": "Support", "url": "https://github.com/farridav/django-jazzmin/issues", "new_window": True},
         {"model": "auth.User"},
     ],
@@ -235,6 +243,16 @@ JAZZMIN_SETTINGS = {
         "auth.Group": "fas fa-users",
         "users.User": "fas fa-user", # Custom icon for your User model
     },
+    
+    "custom_links": {
+        "orders": [{
+            "name": "Analytics Dashboard", 
+            "url": "admin-charts", 
+            "icon": "fas fa-chart-line",
+            "permissions": ["auth.view_user"]
+        }]
+    },
+
     # Icons that are used when one is not manually specified
     "default_icon_parents": "fas fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",

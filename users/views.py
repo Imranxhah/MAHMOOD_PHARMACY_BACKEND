@@ -168,7 +168,7 @@ class PasswordResetRequestView(APIView):
     def post(self, request):
         serializer = PasswordResetRequestSerializer(data=request.data)
         if serializer.is_valid():
-            email = serializer.validated_data['email']
+            email = serializer.validated_data['email'].lower()
             user = User.objects.filter(email=email).first()
             
             if user:
@@ -229,7 +229,7 @@ class ResendOTPView(APIView):
     def post(self, request):
         serializer = PasswordResetRequestSerializer(data=request.data) # Reusing this serializer as it only needs email
         if serializer.is_valid():
-            email = serializer.validated_data['email']
+            email = serializer.validated_data['email'].lower()
             user = User.objects.filter(email=email).first()
 
             if user:

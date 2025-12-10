@@ -1,5 +1,6 @@
 import logging
 from rest_framework import serializers
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.utils import timezone
@@ -14,6 +15,9 @@ User = get_user_model()
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
+        # Normalize email to lowercase to match stored users
+        if 'email' in attrs:
+            attrs['email'] = attrs['email'].lower()
         email = attrs.get('email')
         logger.debug(f"[{self.__class__.__name__}] Starting validation for email: {email}")
 
@@ -92,7 +96,7 @@ class VerifyOTPSerializer(serializers.Serializer):
     )
 
     def validate(self, attrs):
-        email = attrs.get('email')
+        email = attrs.get('email', '').lower()
         otp_code = attrs.get('otp_code')
 
         try:
@@ -108,7 +112,7 @@ class VerifyOTPSerializer(serializers.Serializer):
             raise serializers.ValidationError("Too many failed attempts. Account locked.")
 
         # Check expiration (10 minutes)
-        if user.otp_created_at and timezone.now() > user.otp_created_at + timedelta(minutes=10):
+        if user.otp_created_at and timezone.now() > user.otp_created_at + timedelta(minutes=settings.OTP_EXPIRATION_MINUTES):
             raise serializers.ValidationError("OTP has expired.")
         
         # Check OTP match
@@ -129,7 +133,7 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
     new_password = serializers.CharField(write_only=True, validators=[validate_password])
 
     def validate(self, attrs):
-        email = attrs.get('email')
+        email = attrs.get('email', '').lower()
         otp_code = attrs.get('otp_code')
         
         try:
@@ -150,12 +154,19 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
         # However, reusing registration OTP fields might be risky if they have an active account.
         # But for this scope, let's reuse provided fields.
         
+        if user.otp_attempts > 5:
+            # Increment one more time to ensure it stays locked if they keep trying
+            user.otp_attempts += 1
+            user.save()
+            raise serializers.ValidationError("Too many failed attempts. Account locked.")
+
+        # Check OTP match
         if user.otp_code != otp_code:
              user.otp_attempts += 1
              user.save()
              raise serializers.ValidationError("Invalid OTP.")
              
-        if user.otp_created_at and timezone.now() > user.otp_created_at + timedelta(minutes=10):
+        if user.otp_created_at and timezone.now() > user.otp_created_at + timedelta(minutes=settings.OTP_EXPIRATION_MINUTES):
             raise serializers.ValidationError("OTP has expired.")
 
         attrs['user'] = user

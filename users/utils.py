@@ -13,7 +13,7 @@ def send_otp_email(email, otp):
     Raises Exception if sending fails (critical for transaction rollback).
     """
     subject = 'Your Verification Code'
-    message = f'Your verification code is: {otp}. It expires in 10 minutes.'
+    message = f'Your verification code is: {otp}. It expires in {settings.OTP_EXPIRATION_MINUTES} minutes.'
     email_from = getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@mahmoodpharmacy.com')
     
     send_mail(
