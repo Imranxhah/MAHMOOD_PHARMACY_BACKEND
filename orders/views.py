@@ -40,6 +40,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 with transaction.atomic():
                     branch_id = serializer.validated_data.get('branch_id')
                     payment_method = serializer.validated_data.get('payment_method', 'COD')
+                    order_type = serializer.validated_data.get('order_type', 'Normal')
 
                     # Create Order Header
                     order = Order.objects.create(
@@ -48,6 +49,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                         contact_number=contact_number,
                         branch_id=branch_id,
                         payment_method=payment_method,
+                        order_type=order_type,
                         total_amount=0 # Update later
                     )
 
@@ -137,6 +139,7 @@ class QuickOrderView(APIView):
                     user=request.user,
                     shipping_address=shipping_address,
                     contact_number=contact_number,
+                    order_type='Quick',
                     total_amount=product.price * quantity
                 )
                 

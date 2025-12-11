@@ -6,6 +6,6 @@ router = DefaultRouter()
 router.register(r'prescriptions', PrescriptionViewSet, basename='prescription')
 
 urlpatterns = [
-    path('', include(router.urls)),
     path('prescriptions/upload/', PrescriptionViewSet.as_view({'post': 'create'}), name='prescription-upload'),
+    path('', include(router.urls)),
 ]

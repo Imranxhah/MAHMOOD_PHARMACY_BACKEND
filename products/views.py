@@ -48,8 +48,10 @@ class CategoryListView(generics.ListAPIView):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.filter(is_active=True)
     serializer_class = ProductSerializer
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'category__name']
+    ordering_fields = ['price', 'created_at', 'stock']
+    ordering = ['-created_at'] # Default ordering
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy', 'bulk_upload']:
@@ -64,8 +66,17 @@ class ProductViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         category_id = self.request.query_params.get('category')
+        min_price = self.request.query_params.get('min_price')
+        max_price = self.request.query_params.get('max_price')
+
         if category_id:
             queryset = queryset.filter(category_id=category_id)
+        
+        if min_price:
+            queryset = queryset.filter(price__gte=min_price)
+            
+        if max_price:
+            queryset = queryset.filter(price__lte=max_price)
         return queryset
 
 class ProductBulkUploadView(APIView):

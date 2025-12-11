@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .views import (
     RegisterView, 
     VerifyOTPView, 
@@ -7,7 +7,8 @@ from .views import (
     UserProfileView,
     UserListView,
     CustomTokenObtainPairView,
-    ResendOTPView # Added ResendOTPView
+    ResendOTPView,
+    ChangePasswordView # Added ChangePasswordView
 )
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
@@ -24,9 +25,18 @@ urlpatterns = [
     # Password
     path('auth/password/reset/', PasswordResetRequestView.as_view(), name='password_reset_request'),
     path('auth/password/reset/confirm/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('auth/password/change/', ChangePasswordView.as_view(), name='password_change'),
     
     # Users
     path('users/profile/', UserProfileView.as_view(), name='user_profile'),
     path('users/', UserListView.as_view(), name='user_list'),
 ]
+
+from rest_framework.routers import DefaultRouter
+from .views import AddressViewSet
+
+router = DefaultRouter()
+router.register(r'addresses', AddressViewSet, basename='address')
+
+urlpatterns += router.urls
 

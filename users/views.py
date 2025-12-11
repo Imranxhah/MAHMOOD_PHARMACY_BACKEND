@@ -268,3 +268,38 @@ class ResendOTPView(APIView):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class AddressViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    
+    def get_serializer_class(self):
+        from .serializers import AddressSerializer
+        return AddressSerializer
+
+    def get_queryset(self):
+        return self.request.user.addresses.all()
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class ChangePasswordView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get_serializer_class(self):
+        from .serializers import ChangePasswordSerializer
+        return ChangePasswordSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+
+        if serializer.is_valid():
+            # Set new password
+            self.object.set_password(serializer.validated_data['new_password'])
+            self.object.save()
+            return Response({"message": "Password updated successfully."}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

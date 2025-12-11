@@ -38,11 +38,11 @@ class NearestBranchView(APIView):
         # Sort by distance
         branch_distances.sort(key=lambda x: x[1])
 
-        # Get top 5
-        nearest_5 = branch_distances[:5]
+        # Get all sorted branches
+        sorted_branches = branch_distances
 
         data = []
-        for branch, dist in nearest_5:
+        for branch, dist in sorted_branches:
             serializer = BranchSerializer(branch)
             branch_data = serializer.data
             branch_data['distance_km'] = round(dist, 2)
