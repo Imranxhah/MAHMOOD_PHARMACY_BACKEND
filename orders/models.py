@@ -10,9 +10,15 @@ class Order(models.Model):
         ('Cancelled', 'Cancelled'),
     )
 
+    PAYMENT_CHOICES = (
+        ('COD', 'Cash on Delivery'),
+        ('PAYED', 'Payed'),
+    )
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders', on_delete=models.CASCADE)
     branch = models.ForeignKey('branches.Branch', related_name='orders', on_delete=models.SET_NULL, null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    payment_method = models.CharField(max_length=10, choices=PAYMENT_CHOICES, default='COD')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     shipping_address = models.TextField()
     contact_number = models.CharField(max_length=20, blank=True) # Added for quick order convenience

@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.parsers import MultiPartParser
-from django.db.models import Q
+from django.db.models import Q, Count
 import pandas as pd
 from .models import Category, Product, Favorite
 from .serializers import (
@@ -12,6 +12,33 @@ from .serializers import (
     FavoriteSerializer, 
     ProductBulkUploadSerializer
 )
+
+class HomeView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        # 1. All Categories (for the top list)
+        all_categories = Category.objects.all()
+        
+        # 2. Hot Categories Sections (ordered by order count)
+        hot_categories = Category.objects.annotate(
+            popularity=Count('products__order_items')
+        ).order_by('-popularity')
+
+        sections = []
+        for category in hot_categories:
+            # Get top 10 products for this category
+            products = Product.objects.filter(category=category, is_active=True)[:10]
+            if products.exists():
+                sections.append({
+                    "category": CategorySerializer(category).data,
+                    "products": ProductSerializer(products, many=True, context={'request': request}).data
+                })
+
+        return Response({
+            "categories": CategorySerializer(all_categories, many=True).data,
+            "sections": sections
+        })
 
 class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.all()

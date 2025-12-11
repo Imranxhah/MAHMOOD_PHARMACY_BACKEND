@@ -39,6 +39,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             try:
                 with transaction.atomic():
                     branch_id = serializer.validated_data.get('branch_id')
+                    payment_method = serializer.validated_data.get('payment_method', 'COD')
 
                     # Create Order Header
                     order = Order.objects.create(
@@ -46,6 +47,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                         shipping_address=shipping_address,
                         contact_number=contact_number,
                         branch_id=branch_id,
+                        payment_method=payment_method,
                         total_amount=0 # Update later
                     )
 

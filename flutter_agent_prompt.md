@@ -204,6 +204,7 @@
       "shipping_address": "House 123, Street 4, Islamabad",
       "contact_number": "03001234567",
       "branch_id": 1,
+      "payment_method": "COD",
       "items": [
         {"product_id": "1", "quantity": 2},
         {"product_id": "5", "quantity": 1}

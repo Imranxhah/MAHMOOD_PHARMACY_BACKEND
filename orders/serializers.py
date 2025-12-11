@@ -17,7 +17,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'user', 'branch', 'status', 'total_amount', 'shipping_address', 'contact_number', 'items', 'created_at']
+        fields = ['id', 'user', 'branch', 'status', 'payment_method', 'total_amount', 'shipping_address', 'contact_number', 'items', 'created_at']
         read_only_fields = ['user', 'total_amount', 'status']
         depth = 1 # To show full branch details
 
@@ -25,6 +25,7 @@ class CreateOrderSerializer(serializers.Serializer):
     shipping_address = serializers.CharField(required=True)
     contact_number = serializers.CharField(required=True)
     branch_id = serializers.IntegerField(required=False)
+    payment_method = serializers.ChoiceField(choices=['COD', 'PAYED'], required=False, default='COD')
     items = serializers.ListField(
         child=serializers.DictField(child=serializers.CharField())
     ) 
