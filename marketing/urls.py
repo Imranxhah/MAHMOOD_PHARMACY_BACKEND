@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import BannerViewSet, SendNotificationView
 
 router = DefaultRouter()
-router.register(r'banners', BannerViewSet, basename='banner')
+router.register(r'marketing/banners', BannerViewSet, basename='banner')
 
 urlpatterns = [
     path('marketing/notifications/send/', SendNotificationView.as_view(), name='send-notification'),

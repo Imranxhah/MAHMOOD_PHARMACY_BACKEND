@@ -303,3 +303,6 @@ class ChangePasswordView(generics.UpdateAPIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def post(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+

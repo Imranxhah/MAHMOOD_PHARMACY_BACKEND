@@ -1,4 +1,5 @@
 from rest_framework import viewsets, generics, status
+from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -99,6 +100,27 @@ class OrderViewSet(viewsets.ModelViewSet):
         if not request.user.is_staff:
              return Response({"error": "Only admins can update order status."}, status=status.HTTP_403_FORBIDDEN)
         return super().partial_update(request, *args, **kwargs)
+
+    @action(detail=True, methods=['post'])
+    def cancel_order(self, request, pk=None):
+        order = self.get_object()
+        
+        if order.status != 'Pending':
+             return Response({"error": "Cannot cancel order that is not pending."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            with transaction.atomic():
+                # Restore Stock
+                for item in order.items.all():
+                    product = item.product
+                    product.stock += item.quantity
+                    product.save()
+                
+                order.status = 'Cancelled'
+                order.save()
+                return Response({"message": "Order cancelled successfully."}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class QuickOrderView(APIView):
