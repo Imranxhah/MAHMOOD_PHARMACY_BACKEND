@@ -75,6 +75,21 @@ Most endpoints require: `Authorization: Bearer <access_token>`
 *   **Request Body**: `{"items": [...]}`
 *   **Response**: `{"valid": true}` or `{"valid": false, "errors": [...]}`
 
+### **E. Get Delivery Charges (Public)**
+*   **Endpoint**: `GET /delivery-charges/`
+*   **Auth**: Not required (Public).
+*   **Response**:
+    ```json
+    {
+      "amount": 150.00
+    }
+    ```
+*   **Usage**: Call this on the Cart Screen to show "Shipping Fee".
+*   **Error Handling**:
+    *   This endpoint is very safe. It always returns `200 OK`.
+    *   If no charge is set in admin, it returns `0.00`.
+    *   **500 Internal Server Error**: Extremely rare (Database down). Retry once.
+
 ---
 
 ## 3. Addresses
@@ -93,11 +108,26 @@ Most endpoints require: `Authorization: Bearer <access_token>`
 
 ## 4. Authentication
 
-*   **Login**: `POST /auth/login/` (Returns `access` and `refresh` tokens).
+## 4. Authentication (Sliding Session)
+
+*   **Login**: `POST /auth/login/` (Returns `access` and `refresh` tokens). Store BOTH secure storage.
 *   **Register**: `POST /auth/register/`
 *   **Verify OTP**: `POST /auth/verify/`
 *   **Resend OTP**: `POST /auth/resend-otp/`
 *   **Refresh Token**: `POST /auth/refresh/`
+
+### **Token Rotation Implementation (Critical)**
+This backend uses a **Sliding Session**. Every time you refresh the token, you get a **NEW Access Token** AND a **NEW Refresh Token**.
+
+**Logic for Interceptor (Dio/Http):**
+1.  Intercept `401 Unauthorized` error.
+2.  Send **current** `refresh` token to `POST /auth/refresh/`.
+3.  **Response Handling:**
+    *   The server returns `{ "access": "...", "refresh": "..." }`.
+    *   **CRITICAL**: You MUST replace the old `refresh` token in your storage with the NEW one from the response. The old one is now dead (Blacklisted).
+4.  Retry the failed request with the new access token.
+
+**If /refresh/ fails (401)**: The session is dead (user unused app for >90 days). Force Logout.
 
 ---
 

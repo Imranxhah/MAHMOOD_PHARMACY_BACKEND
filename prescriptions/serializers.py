@@ -8,7 +8,7 @@ class PrescriptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Prescription
-        fields = ['id', 'user', 'image', 'notes', 'status', 'admin_feedback', 'created_at']
+        fields = ['id', 'user', 'image', 'notes', 'contact_number', 'status', 'admin_feedback', 'created_at']
         read_only_fields = ['user']
 
     def create(self, validated_data):

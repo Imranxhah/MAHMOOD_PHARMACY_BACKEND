@@ -38,52 +38,110 @@ class DashboardStatsView(APIView):
 
 
 
-class AdminAnalyticsView(APIView):
+class AnalyticsHubView(APIView):
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAdminUser]
     renderer_classes = [renderers.TemplateHTMLRenderer]
     template_name = 'admin/analytics_dashboard.html'
 
     def get(self, request):
-        # 1. Top 10 Customers
-        top_customers = User.objects.annotate(
-            total_spent=Sum('orders__total_amount')
-        ).order_by('-total_spent')[:10].values('email', 'total_spent')
+        return Response({})
 
-        # 2. Monthly Sales (Last 6 Months)
-        six_months_ago = now() - timedelta(days=180)
-        monthly_sales = Order.objects.filter(created_at__gte=six_months_ago).annotate(
-            period=TruncMonth('created_at')
-        ).values('period').annotate(
-            total=Sum('total_amount')
-        ).order_by('period')
+class AnalyticsReportView(APIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAdminUser]
+    renderer_classes = [renderers.TemplateHTMLRenderer]
+    template_name = 'admin/analytics_report.html'
+
+    def get(self, request, report_type):
+        from branches.models import Branch
+        branch_id = request.GET.get('branch', 'all')
+        branches = Branch.objects.all().values('id', 'name')
         
-        # Format dates for JS
-        monthly_sales_formatted = [
-            {'period': x['period'].strftime('%Y-%m'), 'total': float(x['total'])} 
-            for x in monthly_sales
-        ]
+        # Base Querysets
+        orders = Order.objects.all()
+        if branch_id != 'all':
+            orders = orders.filter(branch_id=branch_id)
+            
+        data = {}
+        chart_type = 'bar' # Default
+        title = "Report"
 
-        # 3. Top Products
-        top_products = Product.objects.annotate(
-            sold_count=Sum('order_items__quantity')
-        ).order_by('-sold_count')[:10].values('name', 'sold_count')
+        if report_type == 'sales_trend': # Keep for legacy redirect if needed, or remove. Let's redirect logic.
+            # Fallback to monthly if someone hits old URL, or just perform monthly
+            report_type = 'monthly_sales'
+        
+        if report_type == 'daily_sales':
+            title = "Daily Sales (Last 30 Days)"
+            thirty_days_ago = now() - timedelta(days=30)
+            daily = orders.filter(created_at__gte=thirty_days_ago).annotate(
+                day=TruncDay('created_at')
+            ).values('day').annotate(total=Sum('total_amount')).order_by('day')
+            
+            data = [{'day': x['day'].strftime('%Y-%m-%d'), 'total': float(x['total'])} for x in daily]
+            chart_type = 'line'
 
-        # 4. Order Status
-        order_status = Order.objects.values('status').annotate(
-            count=Count('id')
-        )
+        elif report_type == 'monthly_sales':
+            title = "Monthly Sales (Last 6 Months)"
+            six_months_ago = now() - timedelta(days=180)
+            monthly = orders.filter(created_at__gte=six_months_ago).annotate(
+                period=TruncMonth('created_at')
+            ).values('period').annotate(total=Sum('total_amount')).order_by('period')
+            
+            data = [{'period': x['period'].strftime('%Y-%m'), 'total': float(x['total'])} for x in monthly]
+            chart_type = 'line'
 
-        # 5. Orders per Branch
-        branch_sales = Order.objects.exclude(branch__isnull=True).values('branch__name').annotate(
-            count=Count('id')
-        ).order_by('-count')
+        elif report_type == 'top_customers':
+            title = "Top 10 Customers"
+            # Annotate manually because we need to filter orders inside the annotation
+            # Standard annotation User.objects.annotate(sum=Sum('orders__total')) doesn't respect external filter easily without Subquery
+            # Simplest for this scale: ID list approach or filtering
+            
+            # Better approach: Filter Order first, then aggregate by User
+            top_users = orders.values('user__email').annotate(
+                total_spent=Sum('total_amount')
+            ).order_by('-total_spent')[:10]
+            
+            data = [{'email': x['user__email'], 'total_spent': x['total_spent']} for x in top_users]
+
+        elif report_type == 'top_products':
+            title = "Top 10 Selling Products"
+            # Filter OrderItems by the filtered orders
+            top_prods = Order.objects.filter(id__in=orders.values('id')).values('items__product__name').annotate(
+                count=Sum('items__quantity')
+            ).order_by('-count')[:10]
+            
+            # Cleaning up the key name
+            data = [{'name': x['items__product__name'], 'count': x['count']} for x in top_prods]
+
+        elif report_type == 'top_categories': # NEW
+            title = "Top Selling Categories"
+            top_cats = Order.objects.filter(id__in=orders.values('id')).values('items__product__category__name').annotate(
+                count=Sum('items__quantity')
+            ).order_by('-count')[:10]
+            
+            data = [{'name': x['items__product__category__name'], 'count': x['count']} for x in top_cats]
+            chart_type = 'pie'
+
+        elif report_type == 'order_status':
+            title = "Order Status Ratio"
+            status_counts = orders.values('status').annotate(count=Count('id'))
+            data = list(status_counts)
+            chart_type = 'doughnut'
+
+        elif report_type == 'branch_sales':
+            title = "Orders per Branch"
+            # For this report, 'all' branch filter doesn't make sense if we want to compare branches
+            # But if user selects a branch, we show only that branch's bar? Yes.
+            branch_counts = orders.exclude(branch__isnull=True).values('branch__name').annotate(count=Count('id')).order_by('-count')
+            data = list(branch_counts)
 
         context = {
-            'top_customers': json.dumps(list(top_customers), cls=DjangoJSONEncoder),
-            'monthly_sales': json.dumps(monthly_sales_formatted, cls=DjangoJSONEncoder),
-            'top_products': json.dumps([{'name': p['name'], 'count': p['sold_count'] or 0} for p in top_products], cls=DjangoJSONEncoder),
-            'order_status': json.dumps(list(order_status), cls=DjangoJSONEncoder),
-            'branch_sales': json.dumps(list(branch_sales), cls=DjangoJSONEncoder),
+            'report_type': report_type,
+            'title': title,
+            'chart_type': chart_type,
+            'data': json.dumps(data, cls=DjangoJSONEncoder),
+            'branches': list(branches),
+            'selected_branch': int(branch_id) if branch_id != 'all' else 'all'
         }
         return Response(context)

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Order, OrderItem
+from .models import Order, OrderItem, DeliveryCharge
 from products.serializers import ProductSerializer
 
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -36,3 +36,8 @@ class CreateOrderSerializer(serializers.Serializer):
         if not value:
             raise serializers.ValidationError("Order must contain at least one item.")
         return value
+
+class DeliveryChargeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DeliveryCharge
+        fields = ['amount']

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'users',
     'products',
@@ -140,6 +141,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Media files (User uploaded images)
@@ -170,8 +172,17 @@ REST_FRAMEWORK = {
 
 from datetime import timedelta
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    # 1. Short Access Token (Security)
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+
+    # 2. Long Refresh Token (User Experience)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=90),
+
+    # 3. ROTATION (The Magic Trick)
+    'ROTATE_REFRESH_TOKENS': True,
+
+    # 4. Blacklist (The Kill Switch)
+    'BLACKLIST_AFTER_ROTATION': True,
 }
 
 OTP_EXPIRATION_MINUTES = 10
@@ -192,6 +203,8 @@ JAZZMIN_SETTINGS = {
 
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
     "site_header": "Mahmood Pharmacy",
+    "site_brand": "Mahmood Pharmacy",
+    "site_logo": "img/app_logo.png",
 
     # Welcome text on the login screen
     "welcome_sign": "Welcome to the Mahmood Pharmacy Admin Panel",
@@ -214,8 +227,6 @@ JAZZMIN_SETTINGS = {
         # Url that opens in current window, use empty _blank for in current window
         {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
         {"name": "Dashboard", "url": "admin-charts", "permissions": ["auth.view_user"], "icon": "fas fa-chart-line"},
-        {"name": "Support", "url": "https://github.com/farridav/django-jazzmin/issues", "new_window": True},
-        {"model": "auth.User"},
     ],
 
     #############
@@ -224,7 +235,6 @@ JAZZMIN_SETTINGS = {
 
     # Additional links to include in the user menu on the top right ("app" url names)
     "usermenu_links": [
-        {"name": "Support", "url": "https://github.com/farridav/django-jazzmin/issues", "new_window": True},
         {"model": "auth.user"}
     ],
 
@@ -269,7 +279,8 @@ JAZZMIN_SETTINGS = {
     # UI Tweaks #
     #############
     # Relative paths to custom CSS/JS files (located in your static files dir)
-    "custom_css": None,
+    # Relative paths to custom CSS/JS files (located in your static files dir)
+    "custom_css": "css/custom_admin.css",
     "custom_js": None,
     # Whether to show a footer
     "show_footer": True,

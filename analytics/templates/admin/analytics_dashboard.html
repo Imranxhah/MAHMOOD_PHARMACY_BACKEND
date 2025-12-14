@@ -1,187 +1,271 @@
-{% extends "admin/base_site.html" %}
 {% load static %}
-
-{% block content %}
-<div style="padding: 20px; max-width: 1200px; margin: 0 auto;">
-    <h1 style="margin-bottom: 30px;">Mahmood Pharmacy Analytics Dashboard</h1>
-    
-    <!-- Helper Mixin for Chart Container -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahmood Pharmacy Analytics</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .chart-container {
-            background: white;
-            padding: 25px;
-            margin-bottom: 30px; /* Space between rows */
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            position: relative;
-        }
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .btn-download {
-            background-color: #417690;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            text-decoration: none;
-        }
-        .btn-download:hover {
-            background-color: #2b5062;
-        }
-        canvas {
-            max-height: 500px; /* Limit height so it doesn't get too tall on big screens */
-        }
+        body { font-family: 'Inter', sans-serif; }
     </style>
+    <script>
+        // Immediately check theme prevents flash
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+<body class="bg-gray-50 text-slate-800 transition-colors duration-300 dark:bg-slate-900 dark:text-slate-100">
 
-    <!-- 1. Top Customers Bar Chart -->
-    <div class="chart-container">
-        <div class="chart-header">
-            <h3>Top 10 Customers</h3>
-            <button class="btn-download" onclick="downloadChart('topCustomersChart', 'top_customers.png')">Download PNG</button>
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm transition-colors duration-300 dark:bg-slate-800 dark:border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Brand -->
+                <div class="flex items-center gap-3">
+                    <a href="{% url 'admin-charts' %}" class="flex items-center gap-2 text-xl font-bold text-teal-600 dark:text-teal-400">
+                        <i class="fa-solid fa-prescription-bottle-medical text-2xl"></i>
+                        <span>Mahmood Pharmacy</span>
+                    </a>
+                </div>
+
+                <!-- Links and Actions -->
+                <div class="flex items-center gap-6">
+                    <a href="{% url 'admin:index' %}" class="text-sm font-medium text-slate-600 hover:text-teal-600 transition-colors dark:text-slate-400 dark:hover:text-teal-400">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> Admin
+                    </a>
+                    
+                    <!-- Dark Mode Toggle -->
+                    <button id="theme-toggle" class="p-2 rounded-full text-slate-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:text-slate-400 dark:hover:bg-slate-700" title="Toggle Dark Mode">
+                        <i id="theme-toggle-dark-icon" class="hidden fa-solid fa-moon text-lg"></i>
+                        <i id="theme-toggle-light-icon" class="hidden fa-solid fa-sun text-lg"></i>
+                    </button>
+                    
+                    <div class="hidden sm:flex items-center gap-3 border-l border-gray-300 pl-6 dark:border-slate-600">
+                        <div class="text-right">
+                            <p class="text-xs font-semibold text-slate-900 dark:text-white">Admin User</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Logged in</p>
+                        </div>
+                        <div class="h-8 w-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold dark:bg-teal-900 dark:text-teal-300">
+                            A
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <canvas id="topCustomersChart"></canvas>
-    </div>
+    </nav>
 
-    <!-- 2. Monthly Sales Line Chart -->
-    <div class="chart-container">
-        <div class="chart-header">
-            <h3>Monthly Sales Trend</h3>
-            <button class="btn-download" onclick="downloadChart('salesTrendChart', 'sales_trend.png')">Download PNG</button>
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <!-- Header -->
+        <div class="mb-10 border-b border-gray-200 pb-5 dark:border-slate-700">
+            <h1 class="text-3xl font-bold text-slate-900 dark:text-white">
+                Analytics <span class="text-teal-600 dark:text-teal-400">Hub</span>
+            </h1>
+            <p class="mt-2 text-lg text-slate-600 dark:text-slate-400">
+                Real-time data insights and performance metrics
+            </p>
         </div>
-        <canvas id="salesTrendChart"></canvas>
-    </div>
 
-    <!-- 3. Product Sales Bar Chart -->
-    <div class="chart-container">
-        <div class="chart-header">
-            <h3>Top Selling Products</h3>
-            <button class="btn-download" onclick="downloadChart('topProductsChart', 'top_products.png')">Download PNG</button>
+        <!-- Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Card Helper Components -->
+            {% with "bg-blue-50 text-blue-500 dark:bg-blue-900/30 dark:text-blue-400" as blue_style %}
+            {% with "bg-purple-50 text-purple-500 dark:bg-purple-900/30 dark:text-purple-400" as purple_style %}
+            {% with "bg-orange-50 text-orange-500 dark:bg-orange-900/30 dark:text-orange-400" as orange_style %}
+            {% with "bg-pink-50 text-pink-500 dark:bg-pink-900/30 dark:text-pink-400" as pink_style %}
+            {% with "bg-teal-50 text-emerald-500 dark:bg-emerald-900/30 dark:text-emerald-400" as teal_style %}
+            {% with "bg-indigo-50 text-indigo-500 dark:bg-indigo-900/30 dark:text-indigo-400" as indigo_style %}
+
+            <!-- 1a. Daily Sales -->
+            <a href="{% url 'analytics-report' 'daily_sales' %}" class="group relative bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="h-14 w-14 rounded-2xl flex items-center justify-center text-2xl {{ blue_style }}">
+                            <i class="fa-solid fa-calendar-day"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">Daily Sales</h3>
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Last 30 Days</p>
+                        </div>
+                    </div>
+                    <div class="h-8 w-8 rounded-full bg-gray-50 dark:bg-slate-700 flex items-center justify-center text-gray-400 group-hover:text-teal-600 group-hover:bg-teal-50 dark:group-hover:text-teal-400 dark:group-hover:bg-teal-900/30 transition-all">
+                        <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 1b. Monthly Sales -->
+            <a href="{% url 'analytics-report' 'monthly_sales' %}" class="group relative bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="h-14 w-14 rounded-2xl flex items-center justify-center text-2xl {{ blue_style }}">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">Monthly Sales</h3>
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Last 6 Months</p>
+                        </div>
+                    </div>
+                    <div class="h-8 w-8 rounded-full bg-gray-50 dark:bg-slate-700 flex items-center justify-center text-gray-400 group-hover:text-teal-600 group-hover:bg-teal-50 dark:group-hover:text-teal-400 dark:group-hover:bg-teal-900/30 transition-all">
+                        <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 2. Customers -->
+            <a href="{% url 'analytics-report' 'top_customers' %}" class="group relative bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="h-14 w-14 rounded-2xl flex items-center justify-center text-2xl {{ purple_style }}">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">Top Customers</h3>
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">VIP Client Analysis</p>
+                        </div>
+                    </div>
+                    <div class="h-8 w-8 rounded-full bg-gray-50 dark:bg-slate-700 flex items-center justify-center text-gray-400 group-hover:text-teal-600 group-hover:bg-teal-50 dark:group-hover:text-teal-400 dark:group-hover:bg-teal-900/30 transition-all">
+                        <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 3. Products -->
+            <a href="{% url 'analytics-report' 'top_products' %}" class="group relative bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="h-14 w-14 rounded-2xl flex items-center justify-center text-2xl {{ orange_style }}">
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">Top Products</h3>
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Inventory Performance</p>
+                        </div>
+                    </div>
+                    <div class="h-8 w-8 rounded-full bg-gray-50 dark:bg-slate-700 flex items-center justify-center text-gray-400 group-hover:text-teal-600 group-hover:bg-teal-50 dark:group-hover:text-teal-400 dark:group-hover:bg-teal-900/30 transition-all">
+                        <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 4. Categories -->
+            <a href="{% url 'analytics-report' 'top_categories' %}" class="group relative bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="h-14 w-14 rounded-2xl flex items-center justify-center text-2xl {{ pink_style }}">
+                            <i class="fa-solid fa-tags"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">Top Categories</h3>
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Sales by Genre</p>
+                        </div>
+                    </div>
+                    <div class="h-8 w-8 rounded-full bg-gray-50 dark:bg-slate-700 flex items-center justify-center text-gray-400 group-hover:text-teal-600 group-hover:bg-teal-50 dark:group-hover:text-teal-400 dark:group-hover:bg-teal-900/30 transition-all">
+                        <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 5. Status -->
+            <a href="{% url 'analytics-report' 'order_status' %}" class="group relative bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="h-14 w-14 rounded-2xl flex items-center justify-center text-2xl {{ teal_style }}">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">Order Status</h3>
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Completion Rates</p>
+                        </div>
+                    </div>
+                    <div class="h-8 w-8 rounded-full bg-gray-50 dark:bg-slate-700 flex items-center justify-center text-gray-400 group-hover:text-teal-600 group-hover:bg-teal-50 dark:group-hover:text-teal-400 dark:group-hover:bg-teal-900/30 transition-all">
+                        <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 6. Branches -->
+            <a href="{% url 'analytics-report' 'branch_sales' %}" class="group relative bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="h-14 w-14 rounded-2xl flex items-center justify-center text-2xl {{ indigo_style }}">
+                            <i class="fa-solid fa-building"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">Branch Stats</h3>
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Location Performance</p>
+                        </div>
+                    </div>
+                    <div class="h-8 w-8 rounded-full bg-gray-50 dark:bg-slate-700 flex items-center justify-center text-gray-400 group-hover:text-teal-600 group-hover:bg-teal-50 dark:group-hover:text-teal-400 dark:group-hover:bg-teal-900/30 transition-all">
+                        <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </div>
+                </div>
+            </a>
+            
+            {% endwith %}{% endwith %}{% endwith %}{% endwith %}{% endwith %}{% endwith %}
         </div>
-        <canvas id="topProductsChart"></canvas>
-    </div>
+    </main>
 
-    <!-- 4. Order Status Pie Chart -->
-    <div class="chart-container">
-        <div class="chart-header">
-            <h3>Orders by Status</h3>
-            <button class="btn-download" onclick="downloadChart('orderStatusChart', 'order_status.png')">Download PNG</button>
-        </div>
-        <div style="height: 500px; display: flex; justify-content: center;">
-             <canvas id="orderStatusChart"></canvas>
-        </div>
-    </div>
+    <!-- Dark Mode Script -->
+    <script>
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
 
-    <!-- 5. Orders per Branch Bar Chart -->
-    <div class="chart-container">
-        <div class="chart-header">
-            <h3>Orders per Branch</h3>
-            <button class="btn-download" onclick="downloadChart('branchSalesChart', 'branch_sales.png')">Download PNG</button>
-        </div>
-        <canvas id="branchSalesChart"></canvas>
-    </div>
-</div>
+        // Update icons based on current state (class added in head)
+        if (document.documentElement.classList.contains('dark')) {
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            themeToggleDarkIcon.classList.remove('hidden');
+        }
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    // Data from Django Context
-    const customerData = {{ top_customers|safe }};
-    const salesData = {{ monthly_sales|safe }};
-    const productData = {{ top_products|safe }};
-    const statusData = {{ order_status|safe }};
+        themeToggleBtn.addEventListener('click', function() {
+            // Toggle icons
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
 
-    // Generic Download Function
-    function downloadChart(canvasId, fileName) {
-        const canvas = document.getElementById(canvasId);
-        // Create a dummy link to trigger download
-        const link = document.createElement('a');
-        link.download = fileName;
-        link.href = canvas.toDataURL('image/png', 1.0);
-        link.click();
-    }
-
-    // 1. Top Customers Chart
-    new Chart(document.getElementById('topCustomersChart'), {
-        type: 'bar',
-        data: {
-            labels: customerData.map(d => d.email),
-            datasets: [{
-                label: 'Total Spent (Rs)',
-                data: customerData.map(d => d.total_spent),
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
-
-    // 2. Sales Trend Chart
-    new Chart(document.getElementById('salesTrendChart'), {
-        type: 'line',
-        data: {
-            labels: salesData.map(d => d.period),
-            datasets: [{
-                label: 'Total Sales (Rs)',
-                data: salesData.map(d => d.total),
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                fill: true,
-                tension: 0.4
-            }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
-
-    // 3. Top Products Chart
-    new Chart(document.getElementById('topProductsChart'), {
-        type: 'bar',
-        data: {
-            labels: productData.map(d => d.name),
-            datasets: [{
-                label: 'Units Sold',
-                data: productData.map(d => d.count),
-                backgroundColor: 'rgba(255, 159, 64, 0.6)',
-                borderColor: 'rgba(255, 159, 64, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false } 
-    });
-
-    // 4. Order Status Chart
-    new Chart(document.getElementById('orderStatusChart'), {
-        type: 'pie',
-        data: {
-            labels: statusData.map(d => d.status),
-            datasets: [{
-                data: statusData.map(d => d.count),
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
-            }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
-
-    // 5. Branch Sales Chart
-    const branchData = {{ branch_sales|safe }};
-    new Chart(document.getElementById('branchSalesChart'), {
-        type: 'bar',
-        data: {
-            labels: branchData.map(d => d.branch__name),
-            datasets: [{
-                label: 'Orders',
-                data: branchData.map(d => d.count),
-                backgroundColor: 'rgba(153, 102, 255, 0.6)',
-                borderColor: 'rgba(153, 102, 255, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
-</script>
-{% endblock %}
+            // If is dark
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+        });
+    </script>
+</body>
+</html>

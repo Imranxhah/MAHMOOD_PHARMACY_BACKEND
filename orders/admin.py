@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Order, OrderItem
+from .models import Order, OrderItem, DeliveryCharge
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
@@ -21,3 +21,10 @@ class OrderAdmin(admin.ModelAdmin):
         return obj.created_at
     order_at.short_description = 'Order At'
     order_at.admin_order_field = 'created_at'
+
+@admin.register(DeliveryCharge)
+class DeliveryChargeAdmin(admin.ModelAdmin):
+    list_display = ('amount', 'updated_at')
+    # Limit to one object in Admin? Not strictly asked but good practice for singleton. 
+    # But user said "if there are multiple object in that model return the first one only than", 
+    # so standard admin is fine.

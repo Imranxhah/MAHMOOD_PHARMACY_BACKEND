@@ -1,0 +1,9 @@
+/* Hide Jazzmin Version in Footer */
+.main-footer .float-right {
+    display: none !important;
+}
+
+/* Ensure Logo/Brand text is styled if needed */
+.brand-link .brand-text {
+    font-weight: bold !important;
+}

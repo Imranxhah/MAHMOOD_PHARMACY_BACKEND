@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from django.db import transaction
 from django.shortcuts import get_object_or_404
-from .models import Order, OrderItem
+from .models import Order, OrderItem, DeliveryCharge
 from .serializers import OrderSerializer, CreateOrderSerializer
 from products.models import Product
 
@@ -199,3 +199,13 @@ class CartValidateView(APIView):
             return Response({"valid": False, "errors": errors}, status=status.HTTP_200_OK) # Return 200 with valid:False logic
         
         return Response({"valid": True}, status=status.HTTP_200_OK)
+
+class DeliveryChargeView(APIView):
+    permission_classes = [] # Allow Any (Public)
+
+    def get(self, request):
+        # Return the first delivery charge object, or 0 if none
+        charge = DeliveryCharge.objects.first()
+        if charge:
+            return Response({"amount": charge.amount}, status=status.HTTP_200_OK)
+        return Response({"amount": 0.00}, status=status.HTTP_200_OK)
