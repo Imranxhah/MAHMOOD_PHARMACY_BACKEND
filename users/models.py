@@ -14,10 +14,23 @@ class User(AbstractUser):
     )
     mobile = models.CharField(validators=[mobile_validator], max_length=11, blank=True)
     
+    # Manager Branch Link
+    branch = models.ForeignKey(
+        'branches.Branch', 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name='managers',
+        help_text="The branch this user manages (if they are a manager)."
+    )
+    
     # OTP Fields
     otp_code = models.CharField(max_length=6, blank=True, null=True)
     otp_created_at = models.DateTimeField(blank=True, null=True)
     otp_attempts = models.IntegerField(default=0)
+    
+    # FCM Token
+    fcm_token = models.CharField(max_length=255, blank=True, null=True, help_text="Firebase Cloud Messaging Token for Push Notifications")
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

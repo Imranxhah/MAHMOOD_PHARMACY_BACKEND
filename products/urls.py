@@ -6,6 +6,7 @@ from .views import (
     ProductBulkUploadView, 
     FavoriteListView, 
     FavoriteToggleView,
+    FavoriteToggleView,
     HomeView
 )
 

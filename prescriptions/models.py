@@ -9,6 +9,13 @@ class Prescription(models.Model):
         ('Rejected', 'Rejected'),
     )
 
+    branch = models.ForeignKey(
+        'branches.Branch', 
+        related_name='prescriptions', 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True
+    )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='prescriptions', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='prescriptions/')
     phone_regex = RegexValidator(

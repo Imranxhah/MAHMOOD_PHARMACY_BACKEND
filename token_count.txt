@@ -1,0 +1,2 @@
+Users with FCM token: 0
+WARNING: No users have an FCM token registered.

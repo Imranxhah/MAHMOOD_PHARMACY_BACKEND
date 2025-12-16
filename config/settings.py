@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'branches',
     'analytics',
     'marketing',
+    'notifications',
 ]
 
 MIDDLEWARE = [
@@ -204,7 +205,7 @@ JAZZMIN_SETTINGS = {
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
     "site_header": "Mahmood Pharmacy",
     "site_brand": "Mahmood Pharmacy",
-    "site_logo": "img/app_logo.png",
+    "site_logo": None,
 
     # Welcome text on the login screen
     "welcome_sign": "Welcome to the Mahmood Pharmacy Admin Panel",
@@ -257,12 +258,20 @@ JAZZMIN_SETTINGS = {
     },
     
     "custom_links": {
-        "orders": [{
-            "name": "Analytics Dashboard", 
-            "url": "admin-charts", 
-            "icon": "fas fa-chart-line",
-            "permissions": ["auth.view_user"]
-        }]
+        "orders": [
+            {
+                "name": "Analytics Dashboard", 
+                "url": "admin-charts", 
+                "icon": "fas fa-chart-line",
+                "permissions": ["auth.view_user"]
+            },
+            {
+                "name": "Manager Dashboard", 
+                "url": "manager-dashboard", 
+                "icon": "fas fa-tachometer-alt",
+                "permissions": ["orders.view_order"]
+            }
+        ]
     },
 
     # Icons that are used when one is not manually specified
@@ -281,11 +290,11 @@ JAZZMIN_SETTINGS = {
     # Relative paths to custom CSS/JS files (located in your static files dir)
     # Relative paths to custom CSS/JS files (located in your static files dir)
     "custom_css": "css/custom_admin.css",
-    "custom_js": None,
+    "custom_js": "js/custom_admin.js",
     # Whether to show a footer
     "show_footer": True,
     # Whether to show the UI customizer on the sidebar
-    "show_ui_builder": False,
+    "show_ui_builder": True,
 
     ###############
     # Change view #
@@ -297,4 +306,37 @@ JAZZMIN_SETTINGS = {
 
     # Add a language dropdown into the navbar
     "language_chooser": False,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": False,
+    "accent": "accent-primary",
+    "navbar": "navbar-white navbar-light",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": False,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "journal",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-outline-primary",
+        "secondary": "btn-outline-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    },
+    "actions_sticky_top": False
 }

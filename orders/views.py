@@ -8,6 +8,115 @@ from django.shortcuts import get_object_or_404
 from .models import Order, OrderItem, DeliveryCharge
 from .serializers import OrderSerializer, CreateOrderSerializer
 from products.models import Product
+from django.shortcuts import render
+from django.db.models import Sum, Count, Q, Case, When, Value, IntegerField
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import ListView
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+
+class ManagerOrderListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = Order
+    template_name = 'orders/manager_dashboard.html'
+    context_object_name = 'orders'
+    paginate_by = 20
+
+    login_url = '/admin/login/' # Ensure redirect goes to admin login
+
+    def test_func(self):
+        user = self.request.user
+        # Debugging permissions
+        print(f"DASHBOARD ACCESS CHECK: User={user.email}, is_staff={user.is_staff}, is_superuser={user.is_superuser}, branch={user.branch}")
+        
+        # Superusers always allowed
+        if user.is_superuser:
+            return True
+            
+        # Staff must have a branch
+        if user.is_staff and user.branch:
+            return True
+            
+        return False
+
+    def get_queryset(self):
+        # Start with all orders
+        queryset = Order.objects.all()
+        
+        # 1. Annotate for custom sorting
+        # Rule: Pending(1) -> Shipped(2) -> Delivered(3) -> Others(4)
+        queryset = queryset.annotate(
+            status_priority=Case(
+                When(status='Pending', then=Value(1)),
+                When(status='Processing', then=Value(1)), # Treat processing same as pending or slightly after? Let's say 1 for now or 2
+                When(status='Shipped', then=Value(2)),
+                When(status='Delivered', then=Value(3)),
+                When(status='Cancelled', then=Value(4)),
+                default=Value(5),
+                output_field=IntegerField(),
+            )
+        )
+        
+        # 2. Sort: Priority Ascending, then Created At Ascending (Oldest First)
+        queryset = queryset.order_by('status_priority', 'created_at')
+
+        user = self.request.user
+        
+        # Filter by branch if not superuser
+        if not user.is_superuser and user.branch:
+            queryset = queryset.filter(branch=user.branch)
+            
+        # Optional Filters from GET params
+        status_filter = self.request.GET.get('status')
+        if status_filter:
+            queryset = queryset.filter(status=status_filter)
+            
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Stats logic
+        qs = self.get_queryset() 
+        # Note: For stats, we usually want totals regardless of pagination, 
+        # but maybe we should use the base filtered QS (by branch) without the search filters?
+        # Let's stick to branch-wide stats.
+        
+        base_qs = Order.objects.all()
+        if not self.request.user.is_superuser and self.request.user.branch:
+            base_qs = base_qs.filter(branch=self.request.user.branch)
+
+        context['total_orders'] = base_qs.count()
+        context['pending_orders'] = base_qs.filter(status='Pending').count()
+        context['completed_orders'] = base_qs.filter(status='Delivered').count()
+        context['total_revenue'] = base_qs.aggregate(Sum('total_amount'))['total_amount__sum'] or 0
+        context['branch_name'] = self.request.user.branch.name if self.request.user.branch else "All Branches"
+        
+        return context
+
+@require_POST
+def update_order_status(request):
+    import json
+    try:
+        data = json.loads(request.body)
+        order_id = data.get('order_id')
+        new_status = data.get('status')
+        
+        order = get_object_or_404(Order, id=order_id)
+        
+        # Permission check: User must be superuser OR manager of the order's branch
+        if not request.user.is_authenticated:
+             return JsonResponse({'success': False, 'message': 'Unauthorized'}, status=403)
+             
+        if not request.user.is_superuser:
+            if order.branch != request.user.branch:
+                 return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
+        
+        order.status = new_status
+        order.save()
+        
+        return JsonResponse({'success': True, 'message': 'Status updated'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=400)
+
 
 class OrderViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]

@@ -145,3 +145,4 @@ class AnalyticsReportView(APIView):
             'selected_branch': int(branch_id) if branch_id != 'all' else 'all'
         }
         return Response(context)
+

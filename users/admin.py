@@ -9,9 +9,9 @@ from .models import User
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('email', 'first_name', 'last_name', 'mobile', 'is_staff', 'order_count', 'total_spent_display')
+    list_display = ('email', 'first_name', 'last_name', 'mobile', 'is_staff', 'branch', 'order_count', 'total_spent_display')
     search_fields = ('email', 'mobile', 'first_name')
-    list_filter = ('is_staff', 'is_active')
+    list_filter = ('is_staff', 'is_active', 'branch')
     
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
