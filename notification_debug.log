@@ -23,3 +23,45 @@
 2025-12-16 19:18:40,193 - notifications.signals - INFO - BroadcastNotification created: Notification
 2025-12-16 19:18:47,040 - notifications.signals - INFO - Successfully sent broadcast: projects/mahmood-pharmacy-af856/messages/7463319198701707030
 2025-12-16 19:18:47,047 - notifications.signals - INFO - Created 4 database notifications for broadcast.
+2025-12-18 02:41:55,551 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-18 02:41:55,553 - notifications.signals - INFO - User has FCM token: cnxx-TYVRw...
+2025-12-18 02:42:00,981 - notifications.signals - INFO - Successfully sent push: projects/mahmood-pharmacy-af856/messages/0:1766007720976309%2e266b7d2e266b7d
+2025-12-18 02:42:47,970 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-18 02:42:47,970 - notifications.signals - INFO - User has FCM token: cnxx-TYVRw...
+2025-12-18 02:42:48,166 - notifications.signals - INFO - Successfully sent push: projects/mahmood-pharmacy-af856/messages/0:1766007768171497%2e266b7d2e266b7d
+2025-12-18 02:46:05,723 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-18 02:46:05,723 - notifications.signals - INFO - User has FCM token: cnxx-TYVRw...
+2025-12-18 02:46:05,937 - notifications.signals - INFO - Successfully sent push: projects/mahmood-pharmacy-af856/messages/0:1766007965914406%2e266b7d2e266b7d
+2025-12-18 02:47:17,245 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-18 02:47:17,245 - notifications.signals - INFO - User has FCM token: cnxx-TYVRw...
+2025-12-18 02:47:17,490 - notifications.signals - INFO - Successfully sent push: projects/mahmood-pharmacy-af856/messages/0:1766008037459576%2e266b7d2e266b7d
+2025-12-18 02:48:07,407 - notifications.signals - INFO - Notification created: Order Placed for user 13
+2025-12-18 02:48:07,407 - notifications.signals - INFO - User has FCM token: cnxx-TYVRw...
+2025-12-18 02:48:07,622 - notifications.signals - INFO - Successfully sent push: projects/mahmood-pharmacy-af856/messages/0:1766008087589988%2e266b7d2e266b7d
+2025-12-18 02:56:23,333 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-18 02:56:23,336 - notifications.signals - INFO - User has FCM token: cnxx-TYVRw...
+2025-12-18 02:56:29,744 - notifications.signals - INFO - Successfully sent push: projects/mahmood-pharmacy-af856/messages/0:1766008589699532%2e266b7d2e266b7d
+2025-12-18 02:57:32,751 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-18 02:57:32,751 - notifications.signals - INFO - User has FCM token: cnxx-TYVRw...
+2025-12-18 02:57:37,764 - notifications.signals - INFO - Successfully sent push: projects/mahmood-pharmacy-af856/messages/0:1766008657731384%2e266b7d2e266b7d
+2025-12-18 03:00:38,381 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-18 03:00:38,384 - notifications.signals - INFO - User has FCM token: cnxx-TYVRw...
+2025-12-18 03:00:46,357 - notifications.signals - INFO - Successfully sent push: projects/mahmood-pharmacy-af856/messages/0:1766008846319649%2e266b7d2e266b7d
+2025-12-18 03:09:49,643 - notifications.signals - INFO - BroadcastNotification created: khkh
+2025-12-18 03:09:57,776 - notifications.signals - INFO - Successfully sent broadcast: projects/mahmood-pharmacy-af856/messages/5809911248071720751
+2025-12-18 03:09:57,782 - notifications.signals - INFO - Created 4 database notifications for broadcast.
+2025-12-18 03:11:10,129 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-18 03:11:10,129 - notifications.signals - INFO - User has FCM token: cnxx-TYVRw...
+2025-12-18 03:11:10,358 - notifications.signals - INFO - Successfully sent push: projects/mahmood-pharmacy-af856/messages/0:1766009470280747%2e266b7d2e266b7d
+2025-12-18 03:18:14,065 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-18 03:18:14,066 - notifications.signals - INFO - User has FCM token: cnxx-TYVRw...
+2025-12-18 03:18:15,851 - notifications.signals - INFO - Successfully sent push: projects/mahmood-pharmacy-af856/messages/0:1766009895739379%2e266b7d2e266b7d
+2025-12-18 03:26:44,420 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-18 03:26:44,422 - notifications.signals - INFO - User has FCM token: cnxx-TYVRw...
+2025-12-18 03:26:53,246 - notifications.signals - INFO - Successfully sent push: projects/mahmood-pharmacy-af856/messages/0:1766010413141135%2e266b7d2e266b7d
+2025-12-18 03:36:51,062 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-18 03:36:51,062 - notifications.signals - INFO - User has FCM token: cnxx-TYVRw...
+2025-12-18 03:36:53,040 - notifications.signals - INFO - Successfully sent push: projects/mahmood-pharmacy-af856/messages/0:1766011012767428%2e266b7d2e266b7d
+2025-12-18 04:03:02,186 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-18 04:03:02,189 - notifications.signals - INFO - User has FCM token: cnxx-TYVRw...
+2025-12-18 04:03:04,842 - notifications.signals - INFO - Successfully sent push: projects/mahmood-pharmacy-af856/messages/0:1766012584529608%2e266b7d2e266b7d

@@ -1,58 +1,130 @@
 # Notification API Guide
 
-This guide details how to integrate Push Notifications and In-App Notification History in the Flutter app.
+Base URL: `/api/notifications/` (Assuming main project routes `notifications/` to this app)
 
-## 1. Prerequisites
-*   You must have `firebase_messaging` installed in Flutter.
-*   You must have `google-services.json` in `android/app/`.
+## 1. Register Device (FCM Token)
+**Endpoint**: `POST /notifications/register-device/`
 
-## 2. Register Device Token (Essential)
-Call this endpoint **immediately after login** and **on app launch** (if logged in) to ensure the backend can push messages to this device.
+**Purpose**: Links the device's FCM token to the user account to enable push notifications.
 
-*   **Endpoint**: `POST /api/notifications/register-device/`
-*   **Auth**: Required (Bearer Token)
-*   **Header**: `Content-Type: application/json`
-
-**Request Body:**
+**Request Body**:
 ```json
 {
-  "fcm_token": "d7x8s... (The long token from Firebase)"
+  "fcm_token": "YOUR_FCM_TOKEN_STRING"
 }
 ```
 
-**Response (200 OK):**
+**Response**:
+- **200 OK**:
+  ```json
+  {
+    "message": "Device registered successfully"
+  }
+  ```
+- **400 Bad Request**: If `fcm_token` is missing.
+
+---
+
+## 2. List Notifications
+**Endpoint**: `GET /notifications/`
+
+**Purpose**: Get the history of in-app notifications for the authenticated user.
+
+**Response**:
+- **200 OK**: List of notification objects.
+  ```json
+  [
+    {
+      "id": 1,
+      "title": "Order Placed",
+      "body": "Your order #123 has been placed.",
+      "is_read": false,
+      "created_at": "2025-12-18 10:30:00"
+    },
+    ...
+  ]
+  ```
+
+---
+
+## 3. Mark All As Read
+**Endpoint**: `PATCH /notifications/mark-all-read/`
+
+**Purpose**: Marks all unread notifications for the user as read.
+
+**Request Body**: None (Empty body)
+
+**Response**:
+- **200 OK**:
+  ```json
+  {
+    "message": "All notifications marked as read"
+  }
+  ```
+
+---
+
+## 4. Mark Single Notification As Read
+**Endpoint**: `PATCH /notifications/{id}/`
+
+**Purpose**: Updates the status of a specific notification.
+
+**Request Body**:
 ```json
 {
-  "message": "Device registered successfully"
+  "is_read": true
 }
 ```
 
-## 3. Fetch Notification History
-Use this to show a "Notification Center" list in the app.
-
-*   **Endpoint**: `GET /api/notifications/`
-*   **Auth**: Required
-
-**Response:**
-```json
-[
+**Response**:
+- **200 OK**: returns the updated notification object.
+  ```json
   {
     "id": 1,
-    "title": "Order Update",
-    "body": "Your order #123 is now Shipped.",
-    "is_read": false,
-    "created_at": "2024-12-16 14:00:00"
+    "title": "Order Placed",
+    "body": "...",
+    "is_read": true,
+    "created_at": "..."
   }
-]
+  ```
+
+---
+
+## 5. Delete Notification
+**Endpoint**: `DELETE /notifications/{id}/`
+
+**Purpose**: Permanently deletes a notification from history.
+
+**Request Body**: None
+
+**Response**:
+- **204 No Content**: On successful deletion.
+
+---
+
+## Real-time Notifications (FCM Payload)
+When the backend triggers a notification (e.g., Order Status Change), the FCM payload received by the app is:
+
+```json
+{
+  "token": "USER_FCM_TOKEN",
+  "notification": {
+    "title": "Order Update",
+    "body": "Your order #123 is now Shipped. Items: 2x Panadol"
+  },
+  "data": {
+    "click_action": "FLUTTER_NOTIFICATION_CLICK",
+    "title": "Order Update",
+    "body": "Your order #123 is now Shipped. Items: 2x Panadol",
+    "type": "order_update", 
+    "order_id": "123"
+  },
+  "android": {
+    "priority": "high",
+    "notification": {
+        "channel_id": "high_importance_channel",
+        "click_action": "FLUTTER_NOTIFICATION_CLICK"
+    }
+  }
+}
 ```
-
-## 4. Mark All as Read (Optional)
-*   **Endpoint**: `PATCH /api/notifications/mark-all-read/`
-*   **Response**: `{"message": "All notifications marked as read"}`
-
-## 5. How Testing Works
-1.  **Register**: Send your token via the API above.
-2.  **Trigger**: Go to Django Admin -> Orders -> Change status of an order (e.g., to "Shipped") -> Save.
-3.  **Result**: 
-    *   Your phone should receive a push notification.
-    *   The `/api/notifications/` list should show the new entry.

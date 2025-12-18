@@ -21,16 +21,45 @@ def send_push_on_notification_creation(sender, instance, created, **kwargs):
         logger.info(f"Notification created: {instance.title} for user {instance.user.id}")
         if instance.user.fcm_token:
             logger.info(f"User has FCM token: {instance.user.fcm_token[:10]}...")
+            
+            # Calculate unread count for badge
+            unread_count = Notification.objects.filter(user=instance.user, is_read=False).count()
+            
             try:
+                # Create the message with Android-specific configuration
                 message = messaging.Message(
                     notification=messaging.Notification(
                         title=instance.title, 
                         body=instance.body
                     ),
+                    data={
+                        "click_action": "FLUTTER_NOTIFICATION_CLICK",
+                        "title": str(instance.title),
+                        "body": str(instance.body),
+                        "type": "order_update", 
+                        "order_id": str(instance.id),
+                        "badge": str(unread_count), # Send current unread count
+                    },
+                    android=messaging.AndroidConfig(
+                        priority='high',
+                        notification=messaging.AndroidNotification(
+                            channel_id='high_importance_channel',
+                            click_action='FLUTTER_NOTIFICATION_CLICK',
+                        ),
+                    ),
                     token=instance.user.fcm_token,
                 )
                 response = messaging.send(message)
                 logger.info(f"Successfully sent push: {response}")
+            
+            except messaging.UnregisteredError:
+                logger.warning(f"Token {instance.user.fcm_token[:10]}... is invalid/unregistered. Removing from user.")
+                instance.user.fcm_token = None
+                instance.user.save()
+            except messaging.SenderIdMismatchError:
+                logger.warning(f"Token {instance.user.fcm_token[:10]}... mismatch. Removing from user.")
+                instance.user.fcm_token = None
+                instance.user.save()
             except Exception as e:
                 logger.error(f"Error sending custom push: {e}", exc_info=True)
         else:

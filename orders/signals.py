@@ -3,6 +3,9 @@ from django.dispatch import receiver
 from firebase_admin import messaging
 from orders.models import Order
 from notifications.models import Notification
+import logging
+
+logger = logging.getLogger(__name__)
 
 @receiver(post_save, sender=Order)
 def order_status_notification(sender, instance, created, **kwargs):
@@ -23,20 +26,20 @@ def order_status_notification(sender, instance, created, **kwargs):
         # If created with no items, it's likely the first step of the view transaction.
         # We skip this and wait for the second save which updates total_amount after adding items.
         if not item_str:
-             logger.info(f"Order #{instance.id} created but has no items yet. Skipping notification.")
-             return
+            logger.info(f"Order #{instance.id} created but has no items yet. Skipping notification.")
+            return
 
         title = "Order Placed"
         body = f"Your order #{instance.id} has been placed. Items: {item_str}"
     else:
         # Order Update (or the second save of creation)
         if instance.status == 'Pending' and item_str:
-             # This handles the second save after items are added
-             title = "Order Placed"
-             body = f"Your order #{instance.id} has been placed successfully. Items: {item_str}"
+            # This handles the second save after items are added
+            title = "Order Placed"
+            body = f"Your order #{instance.id} has been placed successfully. Items: {item_str}"
         else:
-             title = "Order Update"
-             body = f"Your order #{instance.id} is now {instance.status}. Items: {item_str}"
+            title = "Order Update"
+            body = f"Your order #{instance.id} is now {instance.status}. Items: {item_str}"
 
     # Always attempt to save DB notification
 

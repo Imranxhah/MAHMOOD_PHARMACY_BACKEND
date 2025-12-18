@@ -23,8 +23,8 @@ class Order(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders', on_delete=models.CASCADE)
     branch = models.ForeignKey('branches.Branch', related_name='orders', on_delete=models.SET_NULL, null=True, blank=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
-    payment_method = models.CharField(max_length=10, choices=PAYMENT_CHOICES, default='COD')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending', verbose_name="Order Status")
+    payment_method = models.CharField(max_length=10, choices=PAYMENT_CHOICES, default='COD', verbose_name="Payment Method")
     order_type = models.CharField(max_length=10, choices=ORDER_TYPE_CHOICES, default='Normal')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     shipping_address = models.TextField()
