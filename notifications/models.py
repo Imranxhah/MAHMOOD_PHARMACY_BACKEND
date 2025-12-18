@@ -7,6 +7,7 @@ class Notification(models.Model):
     body = models.TextField()
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    order = models.ForeignKey('orders.Order', on_delete=models.CASCADE, null=True, blank=True, related_name='notifications')
 
     def __str__(self):
         return f"Notification for {self.user.email} - {self.title}"

@@ -47,7 +47,7 @@ def order_status_notification(sender, instance, created, **kwargs):
     # This creation will trigger the 'post_save' signal in notifications/signals.py
     # which will handle the actual Firebase Push.
     try:
-        Notification.objects.create(user=user, title=title, body=body)
+        Notification.objects.create(user=user, title=title, body=body, order=instance)
     except Exception as e:
         # Fallback print/log if notification creation fails
         print(f"Error creating notification object: {e}")

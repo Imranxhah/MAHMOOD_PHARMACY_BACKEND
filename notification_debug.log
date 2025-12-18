@@ -65,3 +65,347 @@
 2025-12-18 04:03:02,186 - notifications.signals - INFO - Notification created: Order Update for user 13
 2025-12-18 04:03:02,189 - notifications.signals - INFO - User has FCM token: cnxx-TYVRw...
 2025-12-18 04:03:04,842 - notifications.signals - INFO - Successfully sent push: projects/mahmood-pharmacy-af856/messages/0:1766012584529608%2e266b7d2e266b7d
+2025-12-19 01:18:27,694 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-19 01:18:27,696 - notifications.signals - INFO - User has FCM token: cnxx-TYVRw...
+2025-12-19 01:18:33,768 - notifications.signals - ERROR - Error sending custom push: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+Traceback (most recent call last):
+  File "C:\Users\kpk laptops\Desktop\MAHMOOD_PHARMACY_BACKEND\notifications\signals.py", line 52, in send_push_on_notification_creation
+    response = messaging.send(message)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 125, in send
+    return _get_messaging_service(app).send(message, dry_run)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 421, in send
+    resp = self._client.body(
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 148, in body
+    resp = self.request(method, url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 135, in request
+    resp = self._session.request(method, self.base_url + url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\transport\requests.py", line 533, in request
+    self.credentials.before_request(auth_request, method, url, request_headers)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-12-19 01:20:44,343 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-19 01:20:44,343 - notifications.signals - INFO - User has FCM token: cnxx-TYVRw...
+2025-12-19 01:20:44,513 - notifications.signals - ERROR - Error sending custom push: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+Traceback (most recent call last):
+  File "C:\Users\kpk laptops\Desktop\MAHMOOD_PHARMACY_BACKEND\notifications\signals.py", line 52, in send_push_on_notification_creation
+    response = messaging.send(message)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 125, in send
+    return _get_messaging_service(app).send(message, dry_run)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 421, in send
+    resp = self._client.body(
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 148, in body
+    resp = self.request(method, url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 135, in request
+    resp = self._session.request(method, self.base_url + url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\transport\requests.py", line 533, in request
+    self.credentials.before_request(auth_request, method, url, request_headers)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-12-19 01:24:18,188 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-19 01:24:18,189 - notifications.signals - INFO - User has FCM token: fF-Bp1C1SW...
+2025-12-19 01:24:18,354 - notifications.signals - ERROR - Error sending custom push: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+Traceback (most recent call last):
+  File "C:\Users\kpk laptops\Desktop\MAHMOOD_PHARMACY_BACKEND\notifications\signals.py", line 52, in send_push_on_notification_creation
+    response = messaging.send(message)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 125, in send
+    return _get_messaging_service(app).send(message, dry_run)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 421, in send
+    resp = self._client.body(
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 148, in body
+    resp = self.request(method, url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 135, in request
+    resp = self._session.request(method, self.base_url + url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\transport\requests.py", line 533, in request
+    self.credentials.before_request(auth_request, method, url, request_headers)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-12-19 01:25:13,904 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-19 01:25:13,904 - notifications.signals - INFO - User has FCM token: fF-Bp1C1SW...
+2025-12-19 01:25:14,073 - notifications.signals - ERROR - Error sending custom push: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+Traceback (most recent call last):
+  File "C:\Users\kpk laptops\Desktop\MAHMOOD_PHARMACY_BACKEND\notifications\signals.py", line 52, in send_push_on_notification_creation
+    response = messaging.send(message)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 125, in send
+    return _get_messaging_service(app).send(message, dry_run)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 421, in send
+    resp = self._client.body(
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 148, in body
+    resp = self.request(method, url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 135, in request
+    resp = self._session.request(method, self.base_url + url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\transport\requests.py", line 533, in request
+    self.credentials.before_request(auth_request, method, url, request_headers)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-12-19 01:40:57,072 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-19 01:40:57,073 - notifications.signals - INFO - User has FCM token: fF-Bp1C1SW...
+2025-12-19 01:40:57,074 - notifications.signals - INFO - Attached Order ID 1 to payload.
+2025-12-19 01:41:02,643 - notifications.signals - ERROR - Error sending custom push: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+Traceback (most recent call last):
+  File "C:\Users\kpk laptops\Desktop\MAHMOOD_PHARMACY_BACKEND\notifications\signals.py", line 62, in send_push_on_notification_creation
+    response = messaging.send(message)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 125, in send
+    return _get_messaging_service(app).send(message, dry_run)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 421, in send
+    resp = self._client.body(
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 148, in body
+    resp = self.request(method, url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 135, in request
+    resp = self._session.request(method, self.base_url + url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\transport\requests.py", line 533, in request
+    self.credentials.before_request(auth_request, method, url, request_headers)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-12-19 01:41:31,607 - notifications.signals - INFO - Notification created: Order Placed for user 13
+2025-12-19 01:41:31,607 - notifications.signals - INFO - User has FCM token: fF-Bp1C1SW...
+2025-12-19 01:41:31,608 - notifications.signals - INFO - Attached Order ID 1 to payload.
+2025-12-19 01:41:31,778 - notifications.signals - ERROR - Error sending custom push: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+Traceback (most recent call last):
+  File "C:\Users\kpk laptops\Desktop\MAHMOOD_PHARMACY_BACKEND\notifications\signals.py", line 62, in send_push_on_notification_creation
+    response = messaging.send(message)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 125, in send
+    return _get_messaging_service(app).send(message, dry_run)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 421, in send
+    resp = self._client.body(
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 148, in body
+    resp = self.request(method, url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 135, in request
+    resp = self._session.request(method, self.base_url + url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\transport\requests.py", line 533, in request
+    self.credentials.before_request(auth_request, method, url, request_headers)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-12-19 01:42:15,804 - notifications.signals - INFO - Notification created: Order Placed for user 13
+2025-12-19 01:42:15,804 - notifications.signals - INFO - User has FCM token: fF-Bp1C1SW...
+2025-12-19 01:42:15,806 - notifications.signals - INFO - Attached Order ID 2 to payload.
+2025-12-19 01:42:15,997 - notifications.signals - ERROR - Error sending custom push: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+Traceback (most recent call last):
+  File "C:\Users\kpk laptops\Desktop\MAHMOOD_PHARMACY_BACKEND\notifications\signals.py", line 62, in send_push_on_notification_creation
+    response = messaging.send(message)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 125, in send
+    return _get_messaging_service(app).send(message, dry_run)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 421, in send
+    resp = self._client.body(
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 148, in body
+    resp = self.request(method, url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 135, in request
+    resp = self._session.request(method, self.base_url + url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\transport\requests.py", line 533, in request
+    self.credentials.before_request(auth_request, method, url, request_headers)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-12-19 02:02:31,733 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-19 02:02:31,733 - notifications.signals - INFO - User has FCM token: fF-Bp1C1SW...
+2025-12-19 02:02:31,734 - notifications.signals - INFO - Attached Order ID 10 to payload.
+2025-12-19 02:02:33,115 - notifications.signals - ERROR - Error sending custom push: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+Traceback (most recent call last):
+  File "C:\Users\kpk laptops\Desktop\MAHMOOD_PHARMACY_BACKEND\notifications\signals.py", line 62, in send_push_on_notification_creation
+    response = messaging.send(message)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 125, in send
+    return _get_messaging_service(app).send(message, dry_run)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 421, in send
+    resp = self._client.body(
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 148, in body
+    resp = self.request(method, url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 135, in request
+    resp = self._session.request(method, self.base_url + url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\transport\requests.py", line 533, in request
+    self.credentials.before_request(auth_request, method, url, request_headers)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-12-19 02:07:34,924 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-19 02:07:34,924 - notifications.signals - INFO - User has FCM token: fF-Bp1C1SW...
+2025-12-19 02:07:34,925 - notifications.signals - INFO - Attached Order ID 2 to payload.
+2025-12-19 02:07:36,316 - notifications.signals - ERROR - Error sending custom push: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+Traceback (most recent call last):
+  File "C:\Users\kpk laptops\Desktop\MAHMOOD_PHARMACY_BACKEND\notifications\signals.py", line 62, in send_push_on_notification_creation
+    response = messaging.send(message)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 125, in send
+    return _get_messaging_service(app).send(message, dry_run)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\messaging.py", line 421, in send
+    resp = self._client.body(
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 148, in body
+    resp = self.request(method, url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\firebase_admin\_http_client.py", line 135, in request
+    resp = self._session.request(method, self.base_url + url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\transport\requests.py", line 533, in request
+    self.credentials.before_request(auth_request, method, url, request_headers)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\auth\credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "C:\Users\kpk laptops\AppData\Local\Programs\Python\Python312\Lib\site-packages\google\oauth2\_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-12-19 02:11:23,496 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-19 02:11:23,497 - notifications.signals - INFO - User has FCM token: fF-Bp1C1SW...
+2025-12-19 02:11:23,498 - notifications.signals - INFO - Attached Order ID 29 to payload.
+2025-12-19 02:11:30,010 - notifications.signals - INFO - Successfully sent push: projects/mahmood-pharmacy-af856/messages/0:1766092288957743%2e266b7d2e266b7d
+2025-12-19 02:11:55,245 - notifications.signals - INFO - Notification created: Order Update for user 13
+2025-12-19 02:11:55,245 - notifications.signals - INFO - User has FCM token: fF-Bp1C1SW...
+2025-12-19 02:11:55,246 - notifications.signals - INFO - Attached Order ID 1 to payload.
+2025-12-19 02:11:55,459 - notifications.signals - INFO - Successfully sent push: projects/mahmood-pharmacy-af856/messages/0:1766092314405943%2e266b7d2e266b7d
+2025-12-19 02:12:18,172 - notifications.signals - INFO - Notification created: Order Placed for user 13
+2025-12-19 02:12:18,172 - notifications.signals - INFO - User has FCM token: fF-Bp1C1SW...
+2025-12-19 02:12:18,174 - notifications.signals - INFO - Attached Order ID 2 to payload.
+2025-12-19 02:12:18,395 - notifications.signals - INFO - Successfully sent push: projects/mahmood-pharmacy-af856/messages/0:1766092337339883%2e266b7d2e266b7d
+2025-12-19 02:31:23,855 - notifications.signals - INFO - BroadcastNotification created: 10% Sale
+2025-12-19 02:31:25,594 - notifications.signals - INFO - Successfully sent broadcast: projects/mahmood-pharmacy-af856/messages/791329222492052724
+2025-12-19 02:31:25,600 - notifications.signals - INFO - Created 4 database notifications for broadcast.
