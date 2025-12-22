@@ -26,15 +26,33 @@ class NotificationViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         # 1. Fetch Broadcast Notifications (for everyone)
         broadcasts = BroadcastNotification.objects.all().order_by('-created_at')
+        
+        # Helper: Map broadcast ID to status for auth users
+        broadcast_status_map = {}
+        if request.user.is_authenticated:
+            from .models import BroadcastStatus
+            statuses = BroadcastStatus.objects.filter(user=request.user)
+            broadcast_status_map = {s.broadcast_id: s for s in statuses}
+
         broadcast_data = []
         for b in broadcasts:
-            broadcast_data.append({
-                "id": -b.id, # Use negative ID to distinguish from user notifications and avoid collision
-                "title": b.title,
-                "body": b.body,
-                "is_read": False, # Broadcasts are effectively read-only/unread
-                "created_at": b.created_at.strftime("%Y-%m-%d %H:%M:%S")
-            })
+            # Check status for auth user
+            is_read = False
+            is_deleted = False
+            
+            if request.user.is_authenticated and b.id in broadcast_status_map:
+                status_obj = broadcast_status_map[b.id]
+                is_read = status_obj.is_read
+                is_deleted = status_obj.is_deleted
+
+            if not is_deleted:
+                broadcast_data.append({
+                    "id": -b.id, # Negative ID for broadcasts
+                    "title": b.title,
+                    "body": b.body,
+                    "is_read": is_read,
+                    "created_at": b.created_at.strftime("%Y-%m-%d %H:%M:%S")
+                })
 
         # 2. Fetch User Notifications (if auth)
         user_data = []
@@ -45,10 +63,68 @@ class NotificationViewSet(viewsets.ModelViewSet):
         
         # 3. Combine and Sort
         combined_data = broadcast_data + user_data
-        # Sort by created_at descending (string comparison works for YYYY-MM-DD HH:MM:SS)
         combined_data.sort(key=lambda x: x['created_at'], reverse=True)
 
         return Response(combined_data)
+
+    def destroy(self, request, *args, **kwargs):
+        """
+        Handle deletion. If ID < 0, it's a broadcast.
+        """
+        try:
+            pk = int(kwargs.get('pk'))
+        except (ValueError, TypeError):
+             return super().destroy(request, *args, **kwargs)
+
+        if pk < 0:
+            # Handle Broadcast Deletion
+            if not request.user.is_authenticated:
+                return Response({"error": "Authentication required"}, status=status.HTTP_401_UNAUTHORIZED)
+            
+            broadcast_id = abs(pk)
+            try:
+                broadcast = BroadcastNotification.objects.get(id=broadcast_id)
+                from .models import BroadcastStatus
+                status_obj, _ = BroadcastStatus.objects.get_or_create(user=request.user, broadcast=broadcast)
+                status_obj.is_deleted = True
+                status_obj.save()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            except BroadcastNotification.DoesNotExist:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            # Normal Notification Deletion
+            return super().destroy(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        """
+        Handle updates (e.g. marking as read). If ID < 0, it's a broadcast.
+        """
+        try:
+            pk = int(kwargs.get('pk'))
+        except (ValueError, TypeError):
+             return super().partial_update(request, *args, **kwargs)
+
+        if pk < 0:
+            # Handle Broadcast Update
+            if not request.user.is_authenticated:
+                return Response({"error": "Authentication required"}, status=status.HTTP_401_UNAUTHORIZED)
+            
+            broadcast_id = abs(pk)
+            try:
+                broadcast = BroadcastNotification.objects.get(id=broadcast_id)
+                from .models import BroadcastStatus
+                status_obj, _ = BroadcastStatus.objects.get_or_create(user=request.user, broadcast=broadcast)
+                
+                # Update fields if present in request data
+                if 'is_read' in request.data:
+                    status_obj.is_read = request.data['is_read']
+                
+                status_obj.save()
+                return Response({"message": "Broadcast updated"}, status=status.HTTP_200_OK)
+            except BroadcastNotification.DoesNotExist:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+             return super().partial_update(request, *args, **kwargs)
 
     @action(detail=False, methods=['post'], url_path='register-device')
     def register_device(self, request):

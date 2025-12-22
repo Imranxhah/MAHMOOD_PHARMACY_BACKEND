@@ -26,3 +26,15 @@ class BroadcastNotification(models.Model):
     class Meta:
         verbose_name = "Broadcast Notification"
         verbose_name_plural = "Broadcast Notifications"
+
+class BroadcastStatus(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    broadcast = models.ForeignKey(BroadcastNotification, on_delete=models.CASCADE)
+    is_read = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'broadcast')
+        verbose_name = "Broadcast Status"
+        verbose_name_plural = "Broadcast Statuses"

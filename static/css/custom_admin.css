@@ -510,3 +510,280 @@ img[src*="logo"],
         margin-top: 20px;
     }
 }
+
+/* -------------------------------------------------------------------------- */
+/*             CHANGE FORM MOBILE OPTIMIZATIONS                               */
+/* -------------------------------------------------------------------------- */
+
+@media (max-width: 991px) {
+
+    /* 1. Make the main form container clean */
+    #content-main form .module {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+        border: 1px solid #e9ecef;
+        padding-bottom: 0 !important;
+    }
+
+    /* 2. Field Rows */
+    .form-row {
+        padding: 15px;
+        border-bottom: 1px solid #f1f3f5;
+        display: flex;
+        flex-direction: column;
+        width: 100% !important;
+    }
+
+    .form-row .fieldBox {
+        width: 100% !important;
+        float: none !important;
+        margin-right: 0 !important;
+    }
+
+    .form-row:last-child {
+        border-bottom: none;
+    }
+
+    /* Labels */
+    .form-row label {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #343a40;
+        padding-left: 0;
+        float: none;
+        display: block;
+    }
+
+    /* Inputs & Selects - FORCE FULL WIDTH */
+    .form-row input,
+    .form-row select,
+    .form-row textarea,
+    .select2-container,
+    .select2-selection,
+    .vTextField,
+    .vIntegerField,
+    .vURLField,
+    .readonly {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+    }
+
+    .form-row input[type="text"],
+    .form-row input[type="number"],
+    .form-row input[type="email"],
+    .form-row input[type="password"],
+    .form-row input[type="url"],
+    .form-row select,
+    .form-row textarea,
+    .select2-selection--single {
+        height: 45px !important;
+        /* Touch friendly & Consistent Height */
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+    }
+
+    .form-row textarea {
+        height: auto !important;
+        min-height: 100px;
+    }
+
+    /* Select2 Specific Fixes */
+    .select2-container {
+        width: 100% !important;
+        display: block !important;
+    }
+
+    .select2-selection--single {
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 43px !important;
+        top: 1px !important;
+    }
+
+    /* Readonly Fields */
+    .form-row .readonly {
+        padding: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 5px;
+        min-height: 45px;
+        display: flex;
+        align-items: center;
+    }
+
+    /* 3. Submit Row (Bottom Actions) */
+    .submit-row {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: sticky;
+        bottom: 0;
+        z-index: 1000;
+        border-top: 1px solid #dee2e6;
+        margin-top: 20px;
+        float: none !important;
+        width: 100% !important;
+    }
+
+    .submit-row input,
+    .submit-row a.deletelink {
+        width: 100%;
+        height: 48px;
+        margin: 0 !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        float: none !important;
+    }
+
+    .submit-row p.deletelink-box {
+        margin: 0;
+        float: none !important;
+    }
+
+    /* Hide the "History" button if it's just clutter on mobile */
+    .object-tools {
+        display: none;
+    }
+
+    /* Related Widget Wrapper (add button, eye) - Buttonize them */
+    .related-widget-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 8px;
+        align-items: center;
+        margin-top: 5px;
+    }
+
+    .related-widget-wrapper>a {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        background-color: #f8f9fa;
+        margin: 0;
+        transition: background-color 0.2s;
+    }
+
+    .related-widget-wrapper>a:hover,
+    .related-widget-wrapper>a:active {
+        background-color: #e9ecef;
+    }
+
+    .related-widget-wrapper>a img {
+        /* If icons are images, center them. Font icons usually center fine with flex */
+        width: 20px;
+        height: 20px;
+        opacity: 0.7;
+    }
+
+    /* Tabs (Nav-Pills / Nav-Tabs) Horizontal Scroll */
+    .nav-tabs,
+    .nav-pills {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-bottom: 2px solid #dee2e6;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    .nav-tabs::-webkit-scrollbar {
+        display: none;
+        /* Chrome/Safari */
+    }
+
+    .nav-tabs .nav-item {
+        flex: 0 0 auto;
+    }
+
+    .nav-tabs .nav-link {
+        white-space: nowrap;
+        padding: 10px 15px;
+        font-size: 0.95rem;
+    }
+
+    /* 4. FORCE FULL WIDTH FOR CONTENT CONTAINERS (Fix "Squeezed" look) */
+    .col-12,
+    .col-md-9,
+    .col-lg-10,
+    .col-sm-12 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    #content-main {
+        width: 100% !important;
+        padding: 0 !important;
+    }
+
+    /* Remove any sidebar spacing if present */
+    .content-wrapper,
+    .main-footer,
+    .main-header {
+        margin-left: 0 !important;
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/*             AGGRESSIVE INPUT WIDTH OVERRIDES (ID Specificity)             */
+/* -------------------------------------------------------------------------- */
+@media (max-width: 991px) {
+
+    #content-main .form-row input,
+    #content-main .form-row select,
+    #content-main .form-row textarea,
+    #content-main .select2-container,
+    #content-main .select2-selection,
+    #content-main .vTextField,
+    #content-main .vIntegerField,
+    #content-main .vURLField,
+    #content-main .readonly,
+    #content-main .related-widget-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+        box-sizing: border-box !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    /* Ensure Select2 specifically behaves */
+    #content-main .select2-container {
+        display: block !important;
+    }
+
+    /* Force related widget wrapper to wrap so inputs take full line */
+    #content-main .related-widget-wrapper {
+        display: flex !important;
+        flex-wrap: wrap !important;
+    }
+}

@@ -71,7 +71,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -284,10 +284,8 @@ JAZZMIN_SETTINGS = {
     # Use modals instead of popups
     "related_modal_active": False,
 
-    #############
     # UI Tweaks #
     #############
-    # Relative paths to custom CSS/JS files (located in your static files dir)
     # Relative paths to custom CSS/JS files (located in your static files dir)
     "custom_css": "css/custom_admin.css",
     "custom_js": "js/custom_admin.js",
@@ -315,7 +313,7 @@ JAZZMIN_UI_TWEAKS = {
     "brand_small_text": False,
     "brand_colour": False,
     "accent": "accent-primary",
-    "navbar": "navbar-white navbar-light",
+    "navbar": "navbar-cyan navbar-dark",
     "no_navbar_border": False,
     "navbar_fixed": True,
     "layout_boxed": False,
@@ -328,10 +326,10 @@ JAZZMIN_UI_TWEAKS = {
     "sidebar_nav_compact_style": False,
     "sidebar_nav_legacy_style": False,
     "sidebar_nav_flat_style": False,
-    "theme": "journal",
+    "theme": "lux",
     "dark_mode_theme": None,
     "button_classes": {
-        "primary": "btn-outline-primary",
+        "primary": "btn-primary",
         "secondary": "btn-outline-secondary",
         "info": "btn-info",
         "warning": "btn-warning",

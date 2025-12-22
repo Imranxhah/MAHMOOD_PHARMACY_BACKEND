@@ -1,14 +1,65 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import Prescription
+from branches.models import Branch
+
+class StatusFilter(admin.SimpleListFilter):
+    title = 'Filter by Prescription Status'
+    parameter_name = 'status'
+
+    def lookups(self, request, model_admin):
+        return Prescription.STATUS_CHOICES
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(status=self.value())
+        return queryset
+
+class BranchFilter(admin.SimpleListFilter):
+    title = 'Filter by Branch'
+    parameter_name = 'branch'
+
+    def lookups(self, request, model_admin):
+        return [(b.id, b.name) for b in Branch.objects.all()]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(branch__id=self.value())
+        return queryset
+
+class CreatedAtFilter(admin.SimpleListFilter):
+    title = 'Filter by Upload Time'
+    parameter_name = 'created_at_custom'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('today', 'Today'),
+            ('past_7_days', 'Past 7 days'),
+            ('this_month', 'This month'),
+            ('this_year', 'This year'),
+        )
+
+    def queryset(self, request, queryset):
+        from django.utils import timezone
+        import datetime
+        now = timezone.now()
+        if self.value() == 'today':
+            return queryset.filter(created_at__date=now.date())
+        if self.value() == 'past_7_days':
+            return queryset.filter(created_at__gte=now - datetime.timedelta(days=7))
+        if self.value() == 'this_month':
+            return queryset.filter(created_at__month=now.month, created_at__year=now.year)
+        if self.value() == 'this_year':
+            return queryset.filter(created_at__year=now.year)
+        return queryset
 
 @admin.register(Prescription)
 class PrescriptionAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'branch', 'status', 'created_at', 'image_preview')
     def get_list_filter(self, request):
         if request.user.is_superuser:
-            return ('status', 'branch', 'created_at')
-        return ('status', 'created_at')
+            return (StatusFilter, BranchFilter, CreatedAtFilter)
+        return (StatusFilter, CreatedAtFilter)
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
