@@ -1,4 +1,4 @@
-![Mahmood Pharmacy — Flutter app and Django API](docs/assets/cover.jpg)
+![Mahmood Pharmacy analytics dashboard](docs/screenshots/analytics-hub.png)
 
 # Mahmood Pharmacy · Backend
 
@@ -7,6 +7,20 @@ A Django REST backend for a pharmacy storefront: product discovery, customer acc
 **Python · Django 5.1 · Django REST Framework · Simple JWT · SQLite · Firebase Admin**
 
 [Get started](docs/SETUP.md) · [API overview](docs/API.md) · [Customer app](https://github.com/Imranxhah/MAHMOOD_PHARMACY_CUSTOMER_APP) · [Contribute](CONTRIBUTING.md)
+
+## Admin and analytics
+
+The customized admin combines catalog operations with branch-aware analytics and PDF report workflows.
+
+| Monthly sales | Order status |
+| --- | --- |
+| ![Monthly sales chart](docs/screenshots/monthly-sales.png) | ![Order status chart](docs/screenshots/order-status.png) |
+
+| Report builder | Product management |
+| --- | --- |
+| ![Sales report filters](docs/screenshots/report-builder.png) | ![Product administration](docs/screenshots/product-management.png) |
+
+The admin can also generate a multi-section [visual comparison report](docs/screenshots/visual-report.png). Screens containing personal email addresses were intentionally excluded from this public gallery.
 
 ## What is included
 
