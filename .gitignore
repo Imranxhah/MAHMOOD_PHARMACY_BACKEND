@@ -1,0 +1,24 @@
+# Python and local development
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Credentials and local request payloads
+.env
+.env.*
+!.env.example
+serviceAccountKey.json
+*service-account*.json
+login.json
+
+# Local data and generated output
+db.local.sqlite3
+db.local.sqlite3-*
+staticfiles/
+*.log
+.DS_Store
